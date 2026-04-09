@@ -40,13 +40,7 @@ jobs:
           cd ${PROJECT_NAME}
           echo "➡️ Downloading Spring Boot project..."
           
-          curl https://start.spring.io/starter.zip \
-              -d bootVersion=${SPRING_VERSION} \
-              -d dependencies=${DEP} \
-              -d type=maven-project \
-              -d language=java \
-              -d packageName=com.sogeti.temp \
-              -o  project.zip
+          curl -s -L -o project.zip "https://start.spring.io/starter.zip?type=maven-project&language=java&bootVersion=${SPRING_VERSION}&dependencies=${DEP}&packageName=com.sogeti.temp"
               
           echo "📡 HTTP CODE: ${HTTP_CODE}"
           
