@@ -49,11 +49,6 @@ jobs:
           URL="https://start.spring.io/starter.zip?type=maven-project&language=java&bootVersion=${SPRING_VERSION}&dependencies=${DEP}&packageName=com.sogeti.temp"
           curl -s -L -o project.zip "https://start.spring.io/starter.zip?type=maven-project&language=java&bootVersion=${SPRING_VERSION}&dependencies=${DEP}&packageName=com.sogeti.temp"
 
-          
-    
-  
-      # Gestion erreur HTTP
-
           echo "📡 HTTP CODE: ${HTTP_CODE}"
           
           if [ "$HTTP_CODE" -ne 200 ]; then
