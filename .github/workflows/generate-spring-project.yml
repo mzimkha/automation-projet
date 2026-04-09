@@ -38,10 +38,22 @@ jobs:
         run: |
           mkdir ${PROJECT_NAME}
           cd ${PROJECT_NAME}
-          echo "➡️ Downloading Spring Boot project..."
           
+          echo ""
+          echo "🔍 DEBUG — SPRING INITIALIZR REQUEST"
+          echo "-------------------------------------"
+          echo "➡️ PROJECT_NAME    = ${PROJECT_NAME}"
+          echo "➡️ SPRING_VERSION  = ${SPRING_VERSION}"
+          echo "➡️ DEPENDENCIES    = ${DEP}"
+          echo ""
+          URL="https://start.spring.io/starter.zip?type=maven-project&language=java&bootVersion=${SPRING_VERSION}&dependencies=${DEP}&packageName=com.sogeti.temp"
           curl -s -L -o project.zip "https://start.spring.io/starter.zip?type=maven-project&language=java&bootVersion=${SPRING_VERSION}&dependencies=${DEP}&packageName=com.sogeti.temp"
-              
+
+          
+    
+  
+      # Gestion erreur HTTP
+
           echo "📡 HTTP CODE: ${HTTP_CODE}"
           
           if [ "$HTTP_CODE" -ne 200 ]; then
