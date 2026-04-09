@@ -34,3 +34,6 @@ Le pipeline génère un projet via **Spring Initializr** en utilisant :
 ### 3️⃣ Création d’une structure Java standardisée
 
 Après génération, le pipeline crée automatiquement la structure suivante :
+
+# A venir: Intégration de la partie k8s
+✅ Création des fichiers manifestes pour un deployer le projet avec tout les prérequis 
