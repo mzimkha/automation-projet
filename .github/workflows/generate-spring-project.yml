@@ -22,7 +22,7 @@ jobs:
 
       - name: Create GitHub Repository
         env:
-          GH_PAT: ${{ secrets.GH_PAT }}
+          GH_PAT: ${{ secrets.GITHUB_TOKEN }}
           PROJECT_NAME: ${{ github.event.inputs.project_name }}
         run: |
           curl -H "Authorization: token $GH_PAT" \
@@ -114,5 +114,5 @@ jobs:
           git config core.autocrlf false
           git commit -m "Initial Spring Boot project with custom structure"
           git branch -M main
-          git remote add origin https://${USERNAME}:${GH_PAT}@github.com/${USERNAME}/${PROJECT_NAME}.git
+          git remote add origin https://${USERNAME}:${GITHUB_TOKEN}@github.com/${USERNAME}/${PROJECT_NAME}.git
           git push -u origin main
