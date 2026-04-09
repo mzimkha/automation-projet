@@ -38,7 +38,8 @@ jobs:
         run: |
           mkdir ${PROJECT_NAME}
           cd ${PROJECT_NAME}
-
+          echo "➡️ Downloading Spring Boot project..."
+          
           curl https://start.spring.io/starter.zip \
               -d bootVersion=${SPRING_VERSION} \
               -d dependencies=${DEP} \
@@ -46,6 +47,26 @@ jobs:
               -d language=java \
               -d packageName=com.sogeti.temp \
               -o  project.zip
+              
+          echo "📡 HTTP CODE: ${HTTP_CODE}"
+          
+          if [ "$HTTP_CODE" -ne 200 ]; then
+                  echo "❌ ERROR: Spring Initializr returned HTTP $HTTP_CODE"
+                  echo "👉 Saving response body for debugging..."
+                  curl -s "https://start.spring.io/starter.zip?bootVersion=${SPRING_VERSION}&dependencies=${DEP}&type=maven-project&language=java&packageName=com.sogeti.temp" -o error-response.bin
+                  echo "⚠️ Saved as error-response.bin"
+                  exit 1
+              fi
+
+          echo "➡️ Validating ZIP file..."
+              if ! unzip -t project.zip > /dev/null 2>&1; then
+                  echo "❌ ERROR: The downloaded file is NOT a valid zip."
+                  echo "👉 Saving file for analysis as project.zip.broken"
+                  mv project.zip project.zip.broken
+                  exit 1
+              fi
+          
+              echo "✅ ZIP is valid. Proceeding with extraction."
 
           unzip project.zip
           rm project.zip
