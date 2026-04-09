@@ -10,7 +10,7 @@ on:
         default: "3.5.13"
       dependencies:
         description: "List of default dependencies"
-        default: "web,validation,actuator,data-jpa,postgres,lombok,springdoc-openapi"
+        default: "web,validation,actuator,data-jpa,postgresql,lombok,springdoc-openapi"
 
 jobs:
   create-project:
