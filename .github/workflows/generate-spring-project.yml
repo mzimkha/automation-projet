@@ -45,16 +45,16 @@ jobs:
               -d type=maven-project \
               -d language=java \
               -d packageName=com.sogeti.temp \
-              -o  ${PROJECT_NAME}.zip
+              -o  project.zip
 
-          unzip ${PROJECT_NAME}.zip
-          rm ${PROJECT_NAME}.zip
+          unzip project.zip
+          rm project.zip
 
       - name: Build custom package structure
         env:
           PROJECT_NAME: ${{ github.event.inputs.project_name }}
         run: |
-          cd ${PROJECT_NAME}
+          cd project
 
           ROOT_DIR="src/main/java/com/sogeti/${PROJECT_NAME}"
 
