@@ -9,13 +9,9 @@ on:
         description: "Version Spring Boot"
         default: "3.5.13"
       dependencies:
-        - web
-        - validation
-        - actuator
-        - data-jpa
-        - postgres
-        - lombok
-        - springdoc-openapi
+        description: "List of default dependencies"
+        default: "web,validation,actuator,data-jpa,postgres,lombok,springdoc-openapi"
+
 jobs:
   create-project:
     runs-on: ubuntu-latest
