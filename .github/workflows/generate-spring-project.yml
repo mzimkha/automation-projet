@@ -106,10 +106,12 @@ jobs:
           PROJECT_NAME: ${{ github.event.inputs.project_name }}
         run: |
           cd ${PROJECT_NAME}
+          git config --global init.defaultBranch main
           git init
           git config user.email "ci-bot@github.com"
           git config user.name "github-actions"
           git add .
+          git config core.autocrlf false
           git commit -m "Initial Spring Boot project with custom structure"
           git branch -M main
           git remote add origin https://${USERNAME}:${GH_PAT}@github.com/${USERNAME}/${PROJECT_NAME}.git
