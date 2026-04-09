@@ -45,7 +45,7 @@ jobs:
               -d type=maven-project \
               -d language=java \
               -d packageName=com.sogeti.temp \
-              -o project.zip
+              -o  ${PROJECT_NAME}.zip
 
           unzip ${PROJECT_NAME}.zip
           rm ${PROJECT_NAME}.zip
