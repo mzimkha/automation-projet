@@ -54,7 +54,7 @@ jobs:
         env:
           PROJECT_NAME: ${{ github.event.inputs.project_name }}
         run: |
-          cd project
+          cd ${PROJECT_NAME}
 
           ROOT_DIR="src/main/java/com/sogeti/${PROJECT_NAME}"
 
