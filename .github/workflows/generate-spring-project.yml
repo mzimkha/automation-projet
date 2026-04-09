@@ -64,9 +64,9 @@ jobs:
           mkdir -p ${ROOT_DIR}/repository
           mkdir -p ${ROOT_DIR}/domain
           mkdir -p ${ROOT_DIR}/exception
-          mkdir -p ${ROOT_DIR]/utils
+          mkdir -p ${ROOT_DIR}/utils
 
-          # Déplacement du contenu généré
+          # move content generate
           OLD_PKG="src/main/java/com/sogeti/temp"
           if [ -d "$OLD_PKG" ]; then
             mv ${OLD_PKG}/* ${ROOT_DIR}/
