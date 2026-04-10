@@ -83,8 +83,8 @@ jobs:
       - name: Upload generated project
         uses: actions/upload-artifact@v4
         with:
-          name: spring-project
-          path: spring-project
+          name: ${{ github.event.inputs.project_name }}-artifact
+          path: ${{ github.event.inputs.project_name }}
       ############################################################
       # 3. CREATE REPO ONLY IF EVERYTHING PASSED SUCCESSFULLY
       ############################################################
@@ -96,8 +96,8 @@ jobs:
       - name: Download generated project
         uses: actions/download-artifact@v4
         with:
-          name: spring-project
-          path: spring-project
+          name: ${{ github.event.inputs.project_name }}-artifact
+          path: workspace
 
       - name: Create GitHub Repository (only after success)
         env:
@@ -122,15 +122,15 @@ jobs:
       - name: Download generated project
         uses: actions/download-artifact@v4
         with:
-          name: spring-project
-          path: spring-project
+          name: ${{ github.event.inputs.project_name }}-artifact
+          path: workspace
       - name: Push project to new GitHub repository
         env:
           GH_PAT: ${{ secrets.GH_PAT }}
           USERNAME: ${{ secrets.GH_USERNAME }}
           PROJECT_NAME: ${{ github.event.inputs.project_name }}
         run: |
-          cd "spring-project/${PROJECT_NAME}"
+          cd "workspace/${PROJECT_NAME}"
           git init
           git config user.email "ci-bot@github.com"
           git config user.name "github-actions"
