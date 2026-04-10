@@ -63,9 +63,12 @@ jobs:
       # 3. GENERATE DOCKERFILE
       ############################################################
       - name: Generate Dockerfile
+        env:
+          SCRIPT_FILE: $GITHUB_WORKSPACE/scripts/generate-dockerfile.sh
+          ROJECT_NAME: ${{ github.event.inputs.project_name }}
         run: |
           cd ${PROJECT_NAME}
-          bash ../scripts/generate-dockerfile.sh
+          bash ${SCRIPT_FILE}
 
       - name: Build custom package structure
         env:
