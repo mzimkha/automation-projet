@@ -36,27 +36,7 @@ jobs:
           echo "CLEANED DEPENDENCIES = $DEP_CLEAN"
 
           curl -s -L -o project.zip "https://start.spring.io/starter.zip?type=maven-project&language=java&bootVersion=${SPRING_VERSION}&dependencies=${DEP_CLEAN}&packageName=com.sogeti.temp&configYaml=true&javaVersion=${JAVA_VERSION}"
-
-          echo "📡 HTTP CODE: ${HTTP_CODE}"
           
-          if [ "$HTTP_CODE" -ne 200 ]; then
-                  echo "❌ ERROR: Spring Initializr returned HTTP $HTTP_CODE"
-                  echo "👉 Saving response body for debugging..."
-                  curl -s "https://start.spring.io/starter.zip?bootVersion=${SPRING_VERSION}&dependencies=${DEP}&type=maven-project&language=java&packageName=com.sogeti.temp" -o error-response.bin
-                  echo "⚠️ Saved as error-response.bin"
-                  exit 1
-              fi
-
-          echo "➡️ Validating ZIP file..."
-              if ! unzip -t project.zip > /dev/null 2>&1; then
-                  echo "❌ ERROR: The downloaded file is NOT a valid zip."
-                  echo "👉 Saving file for analysis as project.zip.broken"
-                  mv project.zip project.zip.broken
-                  exit 1
-              fi
-          
-              echo "✅ ZIP is valid. Proceeding with extraction."
-
           unzip project.zip
           rm project.zip
       ############################################################
@@ -65,11 +45,11 @@ jobs:
       - name: Generate Dockerfile
         env:
           SCRIPT_FILE: ${{ github.workspace }}/scripts/generate-dockerfile.sh
-          ROJECT_NAME: ${{ github.event.inputs.project_name }}
+          PROJECT_NAME: ${{ github.event.inputs.project_name }}
         run: |
           echo "Workspace content:"
           ls -R ${{ github.workspace }}
-          echo "Running script: ${SCIPT_FILE}"
+          echo "Running script: ${SCRIPT_FILE}"
           cd ${PROJECT_NAME}
           bash ${SCRIPT_FILE}
 
