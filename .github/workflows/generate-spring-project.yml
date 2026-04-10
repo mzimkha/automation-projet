@@ -5,6 +5,9 @@ on:
     inputs:
       project_name:
         required: true
+      java_version:
+        description: "Java Version"
+        default: "17"
       spring_version:
         description: "Version Spring Boot"
         default: "3.5.13"
@@ -24,6 +27,7 @@ jobs:
         env:
           GH_PAT: ${{ secrets.GH_PAT }}
           PROJECT_NAME: ${{ github.event.inputs.project_name }}
+          JAVA_VERSION: ${{ github.event.inputs.java_version }}
         run: |
           curl -H "Authorization: token $GH_PAT" \
                -H "Accept: application/vnd.github+json" \
@@ -46,8 +50,16 @@ jobs:
           echo "➡️ SPRING_VERSION  = ${SPRING_VERSION}"
           echo "➡️ DEPENDENCIES    = ${DEP}"
           echo ""
-          URL="https://start.spring.io/starter.zip?type=maven-project&language=java&bootVersion=${SPRING_VERSION}&dependencies=${DEP}&packageName=com.sogeti.temp"
-          curl -s -L -o project.zip "https://start.spring.io/starter.zip?type=maven-project&language=java&bootVersion=${SPRING_VERSION}&dependencies=${DEP}&packageName=com.sogeti.temp"
+
+          
+          curl -s -L -o project.zip \
+          "https://start.spring.io/starter.zip?type=maven-project&language=java
+          &bootVersion=${SPRING_VERSION}
+          &dependencies=${DEP}
+          &packageName=com.sogeti.temp
+          &configYaml=true&javaVersion=${JAVA_VERSION}
+
+          #curl -s -L -o project.zip "https://start.spring.io/starter.zip?type=maven-project&language=java&bootVersion=${SPRING_VERSION}&dependencies=${DEP}&packageName=com.sogeti.temp&configuration=yaml&java-version=${JAVA_VERSION}"
 
           echo "📡 HTTP CODE: ${HTTP_CODE}"
           
