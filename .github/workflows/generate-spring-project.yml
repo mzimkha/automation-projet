@@ -32,15 +32,6 @@ jobs:
           mkdir ${PROJECT_NAME}
           cd ${PROJECT_NAME}
           
-          echo ""
-          echo "DEBUG — SPRING INITIALIZR REQUEST"
-          echo "-------------------------------------"
-          echo "PROJECT_NAME    = ${PROJECT_NAME}"
-          echo "SPRING_VERSION  = ${SPRING_VERSION}"
-          echo "DEPENDENCIES    = ${DEP}"
-          echo ""
-
-          
           DEP_CLEAN=$(echo "$DEP" | tr -d '[:space:]' | tr -cd 'a-zA-Z0-9,.-')
           echo "CLEANED DEPENDENCIES = $DEP_CLEAN"
 
