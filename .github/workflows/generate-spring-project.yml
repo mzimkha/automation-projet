@@ -27,6 +27,7 @@ jobs:
         env:
           PROJECT_NAME: ${{ github.event.inputs.project_name }}
           SPRING_VERSION: ${{ github.event.inputs.spring_version }}
+          JAVA_VERSION: ${{ github.event.inputs.java_version }}
           DEP: ${{ github.event.inputs.dependencies }}
         run: |
           mkdir ${PROJECT_NAME}
@@ -35,7 +36,7 @@ jobs:
           DEP_CLEAN=$(echo "$DEP" | tr -d '[:space:]' | tr -cd 'a-zA-Z0-9,.-')
           echo "CLEANED DEPENDENCIES = $DEP_CLEAN"
 
-          curl -s -L -o project.zip "https://start.spring.io/starter.zip?type=maven-project&language=java&bootVersion=${SPRING_VERSION}&dependencies=${DEP_CLEAN}&packageName=com.sogeti.temp&configYaml=true&javaVersion=${JAVA_VERSION}"
+          curl -s -L -o project.zip "https://start.spring.io/starter.zip?type=maven-project&language=java&bootVersion=${SPRING_VERSION}&dependencies=${DEP_CLEAN}&packageName=com.sogeti.temp&configYaml=true&javaVersion=${JAVA_VERSION"
           
           unzip project.zip
           rm project.zip
@@ -47,9 +48,9 @@ jobs:
           SCRIPT_FILE: ${{ github.workspace }}/scripts/generate-dockerfile.sh
           PROJECT_NAME: ${{ github.event.inputs.project_name }}
         run: |
-          echo "Workspace content:"
-          ls -R ${{ github.workspace }}
+          set -e
           echo "Running script: ${SCRIPT_FILE}"
+          chmod +x "${SCRIPT_FILE}"
           cd ${PROJECT_NAME}
           bash ${SCRIPT_FILE}
 
@@ -57,6 +58,7 @@ jobs:
         env:
           PROJECT_NAME: ${{ github.event.inputs.project_name }}
         run: |
+          set -e
           cd ${PROJECT_NAME}
 
           ROOT_DIR="src/main/java/com/sogeti/${PROJECT_NAME}"
