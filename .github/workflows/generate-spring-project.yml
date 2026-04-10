@@ -22,7 +22,7 @@ jobs:
 
       - name: Create GitHub Repository
         env:
-          GH_PAT: ${{ secrets.GITHUB_TOKEN }}
+          GH_PAT: ${{ secrets.GH_PAT }}
           PROJECT_NAME: ${{ github.event.inputs.project_name }}
         run: |
           curl -H "Authorization: token $GH_PAT" \
