@@ -16,7 +16,7 @@ on:
         default: "web,validation,actuator,data-jpa,postgresql,lombok,springdoc-openapi"
 
 jobs:
-  create-project:
+  generate-project:
     runs-on: ubuntu-latest
 
     steps:
@@ -99,11 +99,15 @@ jobs:
           #update packages declarations
           find src/main/java -type f -name "*.java" -exec \
             sed -i "s/com.sogeti.temp/com.sogeti.${PROJECT_NAME}/g" {} \;
-      
+
+
       ############################################################
       # 3. CREATE REPO ONLY IF EVERYTHING PASSED SUCCESSFULLY
       ############################################################
-
+  create-repo:
+    runs-on: ubuntu-latest
+    needs: generate-project
+    steps:
       - name: Create GitHub Repository (only after success)
         env:
           GH_PAT: ${{ secrets.GH_PAT }}
@@ -118,7 +122,12 @@ jobs:
       ############################################################
       # 4. PUSH PROJECT TO NEW REPOSITORY
       ############################################################
+      
 
+  push-code:
+    runs-on: ubuntu-latest
+    needs: create-repo
+    steps:
       - name: Push project to new GitHub repository
         env:
           GH_PAT: ${{ secrets.GH_PAT }}
