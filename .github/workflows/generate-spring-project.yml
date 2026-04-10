@@ -23,17 +23,6 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Create GitHub Repository
-        env:
-          GH_PAT: ${{ secrets.GH_PAT }}
-          PROJECT_NAME: ${{ github.event.inputs.project_name }}
-          JAVA_VERSION: ${{ github.event.inputs.java_version }}
-        run: |
-          curl -H "Authorization: token $GH_PAT" \
-               -H "Accept: application/vnd.github+json" \
-               https://api.github.com/user/repos \
-               -d "{\"name\": \"${PROJECT_NAME}\", \"private\": false }"
-
       - name: Generate Spring Boot project
         env:
           PROJECT_NAME: ${{ github.event.inputs.project_name }}
@@ -86,6 +75,13 @@ jobs:
 
           unzip project.zip
           rm project.zip
+      ############################################################
+      # 3. GENERATE DOCKERFILE
+      ############################################################
+      - name: Generate Dockerfile
+        run: |
+          cd ${PROJECT_NAME}
+          bash ../scripts/generate-dockerfile.sh
 
       - name: Build custom package structure
         env:
@@ -114,20 +110,37 @@ jobs:
           find src/main/java -type f -name "*.java" -exec \
             sed -i "s/com.sogeti.temp/com.sogeti.${PROJECT_NAME}/g" {} \;
       
+      ############################################################
+      # 3. CREATE REPO ONLY IF EVERYTHING PASSED SUCCESSFULLY
+      ############################################################
+
+      - name: Create GitHub Repository (only after success)
+        env:
+          GH_PAT: ${{ secrets.GH_PAT }}
+          PROJECT_NAME: ${{ github.event.inputs.project_name }}
+        run: |
+          echo "Creating repository only now (strategy A)..."
+          curl -s -H "Authorization: token $GH_PAT" \
+                -H "Accept: application/vnd.github+json" \
+                -d "{\"name\": \"${PROJECT_NAME}\", \"private\": false }" \
+                https://api.github.com/user/repos
+
+      ############################################################
+      # 4. PUSH PROJECT TO NEW REPOSITORY
+      ############################################################
+
       - name: Push project to new GitHub repository
         env:
           GH_PAT: ${{ secrets.GH_PAT }}
           USERNAME: ${{ secrets.GH_USERNAME }}
           PROJECT_NAME: ${{ github.event.inputs.project_name }}
         run: |
-          cd ${PROJECT_NAME}
-          git config --global init.defaultBranch main
+          cd "$PROJECT_NAME"
           git init
           git config user.email "ci-bot@github.com"
           git config user.name "github-actions"
           git add .
-          git config core.autocrlf false
-          git commit -m "Initial Spring Boot project with custom structure"
+          git commit -m "Initial Spring Boot project scaffolded automatically"
           git branch -M main
           git remote add origin https://${USERNAME}:${GH_PAT}@github.com/${USERNAME}/${PROJECT_NAME}.git
           git push -u origin main
