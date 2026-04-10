@@ -83,8 +83,9 @@ jobs:
       - name: Upload generated project
         uses: actions/upload-artifact@v4
         with:
-          name: ${{ github.event.inputs.project_name }}-artifact
+          name: generated-project
           path: ${{ github.event.inputs.project_name }}
+          if-no-files-found: error
       ############################################################
       # 3. CREATE REPO ONLY IF EVERYTHING PASSED SUCCESSFULLY
       ############################################################
@@ -96,7 +97,7 @@ jobs:
       - name: Download generated project
         uses: actions/download-artifact@v4
         with:
-          name: ${{ github.event.inputs.project_name }}-artifact
+          name: generated-project
           path: workspace
 
       - name: Create GitHub Repository (only after success)
@@ -122,7 +123,7 @@ jobs:
       - name: Download generated project
         uses: actions/download-artifact@v4
         with:
-          name: ${{ github.event.inputs.project_name }}-artifact
+          name: generated-project
           path: workspace
       - name: Push project to new GitHub repository
         env:
