@@ -64,9 +64,12 @@ jobs:
       ############################################################
       - name: Generate Dockerfile
         env:
-          SCRIPT_FILE: $GITHUB_WORKSPACE/scripts/generate-dockerfile.sh
+          SCRIPT_FILE: ${{ github.workspace }}/scripts/generate-dockerfile.sh
           ROJECT_NAME: ${{ github.event.inputs.project_name }}
         run: |
+          echo "Workspace content:"
+          ls -R ${{ github.workspace }}
+          echo "Running script: ${SCIPT_FILE}"
           cd ${PROJECT_NAME}
           bash ${SCRIPT_FILE}
 
