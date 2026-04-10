@@ -84,7 +84,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: spring-project
-          path: ${{ github.event.inputs.project_name }}
+          path: spring-project
       ############################################################
       # 3. CREATE REPO ONLY IF EVERYTHING PASSED SUCCESSFULLY
       ############################################################
@@ -97,6 +97,7 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: spring-project
+          path: spring-project
 
       - name: Create GitHub Repository (only after success)
         env:
@@ -122,13 +123,14 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: spring-project
+          path: spring-project
       - name: Push project to new GitHub repository
         env:
           GH_PAT: ${{ secrets.GH_PAT }}
           USERNAME: ${{ secrets.GH_USERNAME }}
           PROJECT_NAME: ${{ github.event.inputs.project_name }}
         run: |
-          cd "$PROJECT_NAME"
+          cd "spring-project/${PROJECT_NAME}"
           git init
           git config user.email "ci-bot@github.com"
           git config user.name "github-actions"
