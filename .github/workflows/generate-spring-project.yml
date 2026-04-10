@@ -33,11 +33,11 @@ jobs:
           cd ${PROJECT_NAME}
           
           echo ""
-          echo "🔍 DEBUG — SPRING INITIALIZR REQUEST"
+          echo "DEBUG — SPRING INITIALIZR REQUEST"
           echo "-------------------------------------"
-          echo "➡️ PROJECT_NAME    = ${PROJECT_NAME}"
-          echo "➡️ SPRING_VERSION  = ${SPRING_VERSION}"
-          echo "➡️ DEPENDENCIES    = ${DEP}"
+          echo "PROJECT_NAME    = ${PROJECT_NAME}"
+          echo "SPRING_VERSION  = ${SPRING_VERSION}"
+          echo "DEPENDENCIES    = ${DEP}"
           echo ""
 
           
