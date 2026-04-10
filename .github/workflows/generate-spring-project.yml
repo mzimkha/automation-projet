@@ -100,7 +100,11 @@ jobs:
           find src/main/java -type f -name "*.java" -exec \
             sed -i "s/com.sogeti.temp/com.sogeti.${PROJECT_NAME}/g" {} \;
 
-
+      - name: Upload generated project
+        uses: actions/upload-artifact@v4
+        with:
+          name: spring-project
+          path: ${{ github.event.inputs.project_name }}
       ############################################################
       # 3. CREATE REPO ONLY IF EVERYTHING PASSED SUCCESSFULLY
       ############################################################
@@ -108,6 +112,12 @@ jobs:
     runs-on: ubuntu-latest
     needs: generate-project
     steps:
+      
+      - name: Download generated project
+        uses: actions/download-artifact@v4
+        with:
+          name: spring-project
+
       - name: Create GitHub Repository (only after success)
         env:
           GH_PAT: ${{ secrets.GH_PAT }}
@@ -128,6 +138,10 @@ jobs:
     runs-on: ubuntu-latest
     needs: create-repo
     steps:
+      - name: Download generated project
+        uses: actions/download-artifact@v4
+        with:
+          name: spring-project
       - name: Push project to new GitHub repository
         env:
           GH_PAT: ${{ secrets.GH_PAT }}
