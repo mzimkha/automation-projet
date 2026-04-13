@@ -93,7 +93,7 @@ jobs:
       - uses: actions/upload-artifact@v4
         with:
           name: generated-project
-          path: ${{ github.workspace }}/${{ github.event.inputs.project_name }}
+          path: ${{ github.event.inputs.project_name }}
           if-no-files-found: error
 
   create-repo:
@@ -131,10 +131,15 @@ jobs:
           path: workspace
       # Ensure project exist 
       - name: Ensure project folder exists
+        env:
+          PROJECT_NAME: ${{ github.event.inputs.project_name }}
         run: |
           if [ ! -d "workspace/${PROJECT_NAME}" ]; then
+            echo "Found project in workspace/${PROJECT_NAME}"
+          elif [ -f "workspace/pom.xml" ] || [ -f "workspace/build.gradle" ]; then
+            echo "Found project directly in workspace"
+          else
             echo "❌ ERROR: workspace/${PROJECT_NAME} does not exist"
-            echo "Check artifact content and generation step."
             ls -R workspace
             exit 1
           fi
@@ -144,7 +149,11 @@ jobs:
           USERNAME: ${{ secrets.GH_USERNAME }}
           PROJECT_NAME: ${{ github.event.inputs.project_name }}
         run: |
-          cd "workspace/${PROJECT_NAME}"
+          PROJECT_DIR="workspace/${PROJECT_NAME}"
+          if [ ! -d "$PROJECT_DIR" ]; then
+            PROJECT_DIR="workspace"
+          fi
+          cd "$PROJECT_DIR"
           git init
           git config user.name "github-actions"
           git config user.email "ci-bot@github.com"
