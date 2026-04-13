@@ -40,20 +40,21 @@ jobs:
           
           unzip project.zip
           rm project.zip
-      ############################################################
-      # 3. GENERATE DOCKERFILE
-      ############################################################
-      - name: Generate Dockerfile
+
+      - name: Generate Dockerfile & CI file
         env:
           SCRIPT_FILE: ${{ github.workspace }}/scripts/generate-dockerfile.sh
+          CI_FILE: ${{ github.workspace }}/scripts/generate-ci-file.sh
           PROJECT_NAME: ${{ github.event.inputs.project_name }}
         run: |
           set -e
-          echo "Running script: ${SCRIPT_FILE}"
+          echo "Running script: ${SCRIPT_FILE} & ${CI_FILE}"
           chmod +x "${SCRIPT_FILE}"
+          chmod +x " ${CI_FILE}"
           cd ${PROJECT_NAME}
           bash ${SCRIPT_FILE}
-
+          bash ${CI_FILE}
+ 
       - name: Build custom package structure
         env:
           PROJECT_NAME: ${{ github.event.inputs.project_name }}
