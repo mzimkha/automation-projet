@@ -51,7 +51,7 @@ jobs:
             -o project.zip \
             "https://start.spring.io/starter.zip?type=maven-project&language=java&bootVersion=${SPRING_VERSION}&dependencies=${DEP_CLEAN}&packageName=com.sogeti.temp&configYaml=true&javaVersion=${JAVA_VERSION}"
 
-          unzip project.zip
+          unzip project.zip -d .
           rm project.zip
 
       - name: Security - Scan dependencies (Trivy)
@@ -93,7 +93,7 @@ jobs:
       - uses: actions/upload-artifact@v4
         with:
           name: generated-project
-          path: ${{ github.event.inputs.project_name }}
+          path: ${{ github.workspace }}/${{ github.event.inputs.project_name }}
           if-no-files-found: error
 
   create-repo:
@@ -101,7 +101,8 @@ jobs:
     needs: generate-project
 
     steps:
-      - uses: actions/download-artifact@v4
+      - name: Download generated project
+        uses: actions/download-artifact@v4
         with:
           name: generated-project
           path: workspace
@@ -128,7 +129,15 @@ jobs:
         with:
           name: generated-project
           path: workspace
-
+      # Ensure project exist 
+      - name: Ensure project folder exists
+        run: |
+          if [ ! -d "workspace/${PROJECT_NAME}" ]; then
+            echo "❌ ERROR: workspace/${PROJECT_NAME} does not exist"
+            echo "Check artifact content and generation step."
+            ls -R workspace
+            exit 1
+          fi
       - name: Push project
         env:
           GH_PAT: ${{ secrets.GH_PAT }}
