@@ -1,10 +1,11 @@
 #!/bin/bash
 # Generated directory and ci.yaml file for the CI/CD
 
+
 set -euo pipefail
 
-WORKFLOW_DIR=".github/workflows"
-
+PROJECT_ROOT="$(pwd)"
+WORKFLOW_DIR="$PROJECT_ROOT/.github/workflows"
 CI_FILE="$WORKFLOW_DIR/ci.yaml"
 
 
